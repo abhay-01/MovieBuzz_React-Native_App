@@ -5,10 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import { ScrollView } from 'react-native-gesture-handler';
 import TrendingMovies from '../components/TrendingMovies';
+import MovieList from '../components/MovieList';
 
 const ios = Platform.OS == 'ios';
 const HomeScreen = () => {
   const [trending, setTrending] = useState([1, 2, 3])
+  const [upcoming, setUpcoming] = useState([1, 2, 3])
+  const [topRated, setTopRated] = useState([1, 2, 3])
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -36,6 +39,13 @@ const HomeScreen = () => {
         {/* Trending movies crousel */}
 
         <TrendingMovies data={trending} />
+
+
+        {/* Upcoming movies */}
+
+        <MovieList title = "Upcoming" data = {upcoming}/>
+
+        {/* TopRated Movies */}
       </ScrollView>
 
     </View>
