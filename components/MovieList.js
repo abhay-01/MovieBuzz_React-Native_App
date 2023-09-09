@@ -10,7 +10,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
-export default function MovieList({ title, data }) {
+export default function MovieList({ title, data, hideSeeAll}) {
   const movieName = "Shershah";
   const navigation = useNavigation();
 
@@ -18,9 +18,14 @@ export default function MovieList({ title, data }) {
     <View className="mb-8 space-y-4">
       <View className="mx-4 justify-between flex-row items-center">
         <Text className="text-white text-xl">{title}</Text>
-        <TouchableOpacity>
-          <Text style={{ color: 'yellow' }} className='text-lg' >See All</Text>
-        </TouchableOpacity>
+
+     {
+      !hideSeeAll && 
+      <TouchableOpacity>
+      <Text style={{ color: 'yellow' }} className='text-lg' >See All</Text>
+     </TouchableOpacity>
+     }
+       
       </View>
 
       {/* movie row */}
@@ -46,7 +51,7 @@ export default function MovieList({ title, data }) {
                 }}
               />
                  </View>
-              <Text className="text-neutral-300 ml-1">{
+              <Text className="text-neutral-300 ml-1 mt-3 text-center">{
                 movieName.length>14?movieName.slice(0,14)+"...":movieName
               }</Text>
         </TouchableWithoutFeedback>
