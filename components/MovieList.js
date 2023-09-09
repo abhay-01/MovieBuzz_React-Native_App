@@ -38,7 +38,7 @@ export default function MovieList({ title, data, hideSeeAll}) {
           data.map((item, index) => {
             return(
             <TouchableWithoutFeedback key={index}
-              onPress={() => navigation.navigate('MovieScreen', item)}
+              onPress={() => navigation.push('MovieScreen', item)}
             >
               <View className='space-y-1 mr-4'>
           <Image

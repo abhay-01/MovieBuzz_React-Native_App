@@ -6,12 +6,20 @@ import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons
 import { ScrollView } from 'react-native-gesture-handler';
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
+import Cast from '../components/Cast';
+import SearchScreen from './SearchScreen';
+import { useNavigation } from '@react-navigation/native';
+import Loading from '../components/Loading';
 
 const ios = Platform.OS == 'ios';
 const HomeScreen = () => {
   const [trending, setTrending] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9])
   const [upcoming, setUpcoming] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9])
   const [topRated, setTopRated] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -24,31 +32,42 @@ const HomeScreen = () => {
             className="text-white text-3xl font-bold">
             <Text style={{ color: 'yellow' }}>M</Text>ovies <Text style={{ color: 'yellow' }}>B</Text>uzz
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
             <MagnifyingGlassIcon size="30" strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
 
-      <ScrollView
+{
+  loading?(
+    <Loading/>
+  ):(
 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 10 }}
-      >
+    
+    <ScrollView
 
-        {/* Trending movies crousel */}
+    showsVerticalScrollIndicator={false}
+    contentContainerStyle={{ paddingBottom: 10 }}
+  >
 
-        <TrendingMovies data={trending} />
+    {/* Trending movies crousel */}
+
+    <TrendingMovies data={trending} />
 
 
-        {/* Upcoming movies */}
+    {/* Upcoming movies */}
 
-        <MovieList title = "Upcoming" data = {upcoming}/>
+    <MovieList title = "Upcoming" data = {upcoming}/>
 
-        {/* TopRated Movies */}
+    {/* TopRated Movies */}
 
-        <MovieList title = "Top-Rated" data = {topRated}/>
-      </ScrollView>
+    <MovieList title = "Top-Rated" data = {topRated}/>
+
+    <Cast cast = {cast} headShown = {true}/>
+
+  </ScrollView>
+  )
+}
 
     </View>
   )

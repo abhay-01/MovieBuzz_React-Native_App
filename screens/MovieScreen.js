@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'react-native-svg';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
-
+import Loading from '../components/Loading'
 
 
 
@@ -23,6 +23,8 @@ export default function MovieScreen() {
     const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
     const [cast, setCast] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const [loading, setLoading] = useState(false);
+
     const movieName = "Ant-Man and the Wasp: Quantumania";
 
     const { params: item } = useRoute();
@@ -55,27 +57,36 @@ export default function MovieScreen() {
                         />
                     </TouchableOpacity>
                 </SafeAreaView>
-                <View>
-                    <Image
-                        source={require('../assets/movie1.png')}
-                        style={{
-                            width,
-                            height: height * 0.48,
 
-                        }}
-                    />
+                {
 
-                    <LinearGradient
-                        color={['rgba(0, 0, 0, 0.6)', 'transparent']}
-                        style={{
-                            width,
-                            height: height * 0.40,
-                        }}
-                        start={{ x: 0.5, y: 0 }}
-                        end={{ x: 0.5, y: 1 }}
-                        className="absolute bottom-0"
-                    />
-                </View>
+                    loading ? (
+                        <Loading />
+                    ) : (
+
+                        <View>
+                            <Image
+                                source={require('../assets/movie1.png')}
+                                style={{
+                                    width,
+                                    height: height * 0.48,
+
+                                }}
+                            />
+
+                            <LinearGradient
+                                color={['rgba(0, 0, 0, 0.6)', 'transparent']}
+                                style={{
+                                    width,
+                                    height: height * 0.40,
+                                }}
+                                start={{ x: 0.5, y: 0 }}
+                                end={{ x: 0.5, y: 1 }}
+                                className="absolute bottom-0"
+                            />
+                        </View>
+                    )
+                }
 
                 {/* movie details */}
                 <View style={{
@@ -89,18 +100,18 @@ export default function MovieScreen() {
                     <Text className="text-neutral-400 font-semibold text-center">Action | Thrill | Comedy</Text>
 
                     <Text className="text-neutral-400 mx-4 tracking-wide">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magento this collia di super ammi hoeulksnlf joej fhei oe nie 
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magento this collia di super ammi hoeulksnlf joej fhei oe nie
                     </Text>
 
                 </View>
 
                 {/* cast */}
 
-                <Cast cast = {cast}/>
+                <Cast cast={cast} headShown={false} />
 
                 {/* similar movies */}
 
-                <MovieList title = "You Love to Watch" hideSeeAll = {true} data = {similarMovies}/>
+                <MovieList title="You Love to Watch" hideSeeAll={true} data={similarMovies} />
             </View>
         </ScrollView>
 

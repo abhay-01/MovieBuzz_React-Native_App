@@ -3,13 +3,32 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 
-export default function Cast({ cast }) {
+export default function Cast({ cast, headShown}) {
     const navigation = useNavigation();
     const personName = "Keenu Reeves"
     const characterName = "John Wick"
     return (
         <View className="my-6">
-            <Text className="text-white text-xl mx-4 mb-5">Top Cast</Text>
+
+            {
+                !headShown &&(
+
+                    <Text className="text-white text-xl mx-4 mb-5">Top Cast</Text>
+
+                )
+            }
+
+            {
+                headShown && (
+                    <Text className="text-white text-xl mx-4 mb-5">Cast you watch</Text>
+
+
+                )
+            }
+
+
+
+
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -29,6 +48,8 @@ export default function Cast({ cast }) {
                                         height: 100,
                                         borderRadius: 40,
                                         marginBottom: 10 ,
+                                        borderColor: 'white',
+                                        borderWidth: 1.3
                                     }}
                                     
                                     />
