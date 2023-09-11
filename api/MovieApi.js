@@ -26,6 +26,10 @@ export const image500 = path => path ? `${imageBaseUrl}w500${path}` : null;
 export const image342 = path => path ? `${imageBaseUrl}w342${path}` : null;
 export const image185 = path => path ? `${imageBaseUrl}w185${path}` : null;
 
+export const personDetails = id => `https://api.themoviedb.org/3/person/${id}?api_key=${apiKey}`;
+export const personCredits = id => `https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${apiKey}`;
+
+export const fallback_poster = 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg';
 
 
 
@@ -59,15 +63,23 @@ export const fetchTopRatedMovies = async() => {
     return apiCall(topRated);
 }
 
-export const fetchMovieDetails = async(id) => {
+export const fetchMovieDetails = id => {
     return apiCall(movieDetails(id));
 }
 
-export const fetchMovieCredits = async(id) => {
+export const fetchMovieCredits = id => {
     return apiCall(movieCredits(id));
 }
 
-export const fetchSimilarMovies = async(id) => {
+export const fetchSimilarMovies = id => {
     return apiCall(similarMovies(id));
+}
+
+export const fetchPersonDetails = id => {
+    return apiCall(personDetails(id));
+}
+
+export const fetchPersonCredits = id => {
+    return apiCall(personCredits(id));
 }
 

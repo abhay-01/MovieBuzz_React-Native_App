@@ -12,6 +12,7 @@ import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import { image500 } from '../api/MovieApi'
 import Loading from '../components/Loading'
+import { fallback_poster } from '../api/MovieApi';
 import { fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies } from '../api/MovieApi';
 
 
@@ -22,10 +23,10 @@ const height = Dimensions.get('window').height;
 export default function MovieScreen() {
 
     const [isFilled, setIsFilled] = useState(false);
-    const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const [similarMovies, setSimilarMovies] = useState([]);
 
-    const [cast, setCast] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    const[movie, setMovie] = useState([]);
+    const [cast, setCast] = useState([]);
+    const [movie, setMovie] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const movieName = "Ant-Man and the Wasp: Quantamania";
@@ -37,26 +38,41 @@ export default function MovieScreen() {
     useEffect(() => {
 
         //will call api
+
+        // console.log("Details: ",item);
+
         setLoading(true);
-        fetchMovieDetails(item.id);
-        fetchMovieCredits(item.id);
-        fetchSimilarMovies(item.id);
+        getMovieDetails(item.id);
+        getMovieCredits(item.id);
+        getSimilarMovies(item.id);
+
 
 
     }, [item]);
 
-    const fetchMovieDetails = async (id) => {
-        const details = await fetchMovieDetails(id);
-        console.log(details);
-        if(details) setMovie(details);
-        setLoading(false);
+    const getMovieDetails = async id => {
 
+        const details = await fetchMovieDetails(id);
+        // console.log("Details: ", details);
+
+        setMovie(details);
+        setLoading(false);
     }
 
-    const fetchMovieCredits = async (id) => {
+    const getMovieCredits = async id => {
         const credits = await fetchMovieCredits(id);
+        console.log("Credits: ", credits);
         setCast(credits.cast);
     }
+
+    const getSimilarMovies = async id => {
+        const similar = await fetchSimilarMovies(id);
+        // console.log(similar);
+        setSimilarMovies(similar.results);
+    }
+
+
+
 
     return (
         <ScrollView
@@ -90,10 +106,10 @@ export default function MovieScreen() {
                             <Image
                                 // source={require('../assets/movie1.png')}
 
-                                source={{ uri: image500(movie.backdrop_path) }}
+                                source={{ uri: image500(movie?.poster_path) || fallback_poster }}
                                 style={{
                                     width,
-                                    height: height * 0.48,
+                                    height: height * 0.61,
 
                                 }}
                             />
@@ -116,15 +132,39 @@ export default function MovieScreen() {
                 <View style={{
                     marginTop: -(height * 0)
                 }}
-                    className="space-y-3"
+                    className="space-y-3" 
                 >
 
-                    <Text className="text-white text-center text-3xl font-bold tracking wider">{movieName}</Text>
-                    <Text className="text-neutral-400 font-semibold text-center">Released | 2020 | 170 min</Text>
-                    <Text className="text-neutral-400 font-semibold text-center">Action | Thrill | Comedy</Text>
+                    <Text className="text-white text-center text-3xl font-bold tracking wider">{movie.original_title}</Text>
+                    {
+                        movie?.id?(
+                            <Text className="text-neutral-400 font-semibold text-center">{movie.status} | {movie.release_date} | {movie.runtime} min</Text>
+
+                        ):
+                        null
+                    }
+
+                    <View className = "flex-row justify-center mx-4 space-x-2">
+
+                    {
+                        movie?.genres?.map((genre, index) => {
+                            
+                            let isLast = index === movie.genres.length - 1;
+                            return(
+<Text className="text-neutral-400 font-semibold text-center">
+                                        {genre?.name} {isLast? null :'|'}
+                                    </Text>
+
+                            )
+                             } )
+                    }
+
+</View>
+
+                    {/* <Text className="text-neutral-400 font-semibold text-center"> Action| Thrill | Comedy</Text> */}
 
                     <Text className="text-neutral-400 mx-4 tracking-wide">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magento this collia di super ammi hoeulksnlf joej fhei oe nie
+                        {movie.overview}
                     </Text>
 
                 </View>
@@ -135,7 +175,7 @@ export default function MovieScreen() {
 
                 {/* similar movies */}
 
-                {/* <MovieList title="You Love to Watch" hideSeeAll={true} data={similarMovies} /> */}
+                <MovieList title="You Love to Watch" hideSeeAll={true} data={similarMovies} />
             </View>
         </ScrollView>
 

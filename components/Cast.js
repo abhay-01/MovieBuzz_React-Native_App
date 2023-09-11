@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
+import { image185 } from '../api/MovieApi'
+
 
 export default function Cast({ cast, headShown}) {
     const navigation = useNavigation();
@@ -42,7 +44,8 @@ export default function Cast({ cast, headShown}) {
                             onPress={() => navigation.navigate('PersonScreen', item)}
                             >
                                 <Image
-                                    source={require('../assets/person1.png')}
+                                    // source={require('../assets/person1.png'18)}
+                                    source={{ uri: image185(item.profile_path) }}
                                     style={{
                                         width: 80,
                                         height: 100,
@@ -55,12 +58,12 @@ export default function Cast({ cast, headShown}) {
                                     />
 
                                 <Text className = "text-white text-xs mt-1">{
-                                    characterName.length > 10 ? characterName.slice(0, 14) + "..." : characterName
+                                    item.character.length > 10 ? item.character.slice(0, 14) + "..." : item.character
                     }
                                 </Text>
 
                                 <Text className = "text-neutral-400 text-xs mt-1">{
-                                    personName.length > 10 ? personName.slice(0, 10) + "..." : characterName
+                                    item.original_name.length > 10 ?  item.original_name.slice(0, 10) + "..." :  item.original_name
                     }
                                 </Text>
                             </TouchableOpacity>

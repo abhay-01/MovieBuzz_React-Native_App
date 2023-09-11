@@ -8,6 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { useRoute } from '@react-navigation/native';
+import { fetchPersonDetails, fetchPersonMovies } from '../api/MovieApi';
+import { image342 } from '../api/MovieApi';
 
 
 
@@ -18,10 +21,34 @@ const height = Dimensions.get('window').height;
 export default function PersonScreen() {
 
     const navigation = useNavigation();
+
+    const { params: item } = useRoute();
     const [isFilled, setIsFilled] = useState(false);
+    const[personDetails, setPersonDetails] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const [personMovies, setPersonMovies] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const [personMovies, setPersonMovies] = useState([]);
+
+    useEffect(() => {
+
+        setLoading(true);
+        getPersonDetails(item.id);
+        getPersonMovies(item.id);
+    }, [item]);
+
+
+    const getPersonDetails = async id => {
+        const details = await fetchPersonDetails(id);
+        // console.log("Details: ", details);
+        setPersonDetails(details);
+        setLoading(false);
+    }
+
+    const getPersonMovies = async id => {
+        const movies = await fetchPersonMovies(id);
+        // console.log("Movies: ", movies);
+        setPersonMovies(movies.cast);
+    }
 
     return (
         <ScrollView
@@ -63,7 +90,8 @@ export default function PersonScreen() {
 
                                 >
                                     <Image
-                                        source={require('../assets/person1.png')}
+                                        // source={require('../assets/person1.png')}
+                                        source={{ uri: image342(personDetails.profile_path) }}
                                         style={{
                                             width: width * 0.75,
                                             height: height * 0.4,
@@ -78,29 +106,37 @@ export default function PersonScreen() {
 
 
                 <View className="mt-5">
-                    <Text className="text-white text-3xl text-center">Keenu Reeves</Text>
-                    <Text className="text-3xs text-center text-neutral-500">London,United Kingdom</Text>
+                    <Text className="text-white text-3xl text-center">{item.name}</Text>
+                    <Text className="text-3xs text-center text-neutral-500">{
+                    item?.place_of_birth || "Unknown"
+                    }
+                    </Text>
                 </View>
 
                 <View className="bg-neutral-700 rounded-full mx-3 p-3 mt-6 flex-row justify-between items-center">
                     <View className="items-center border-r-2 border-r-neutral-400 px-2">
                         <Text className="text-white font-semibold">Gender</Text>
-                        <Text className="text-neutral-300 text-sm">Male</Text>
+                        <Text className="text-neutral-300 text-sm">
+
+                            {
+                                item?.gender == 1?"Female":"Male"
+                            }
+                        </Text>
                     </View>
 
                     <View className="items-center border-r-2 border-r-neutral-400 px-2">
                         <Text className="text-white font-semibold">Birthday</Text>
-                        <Text className="text-neutral-300 text-sm">19xx-mm-dd</Text>
+                        <Text className="text-neutral-300 text-sm">{item?.birthday || 'N/A'}</Text>
                     </View>
 
                     <View className="items-center border-r-2 border-r-neutral-400 px-2">
                         <Text className="text-white font-semibold">Known For</Text>
-                        <Text className="text-neutral-300 text-sm">Acting</Text>
+                        <Text className="text-neutral-300 text-sm">{item.known_for_department}</Text>
                     </View>
 
                     <View className="items-center px-2">
                         <Text className="text-white font-semibold ">Popularity</Text>
-                        <Text className="text-neutral-300 text-sm">70.2</Text>
+                        <Text className="text-neutral-300 text-sm">{item.popularity}</Text>
                     </View>
 
 
@@ -109,11 +145,13 @@ export default function PersonScreen() {
                 <View className="space-y-3 mx-4 my-6">
                     <Text className="text-white text-xl">Biography</Text>
                     <Text className="text-neutral-400 mx-4 tracking-wide">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magento this collia di super ammi hoeulksnlf joej fhei oe nie
+                        {
+                            personDetails?.biography || "No biography found"
+                        }
                     </Text>
                 </View>
 
-                {/* <MovieList title="Filmography" hideSeeAll={true} data={personMovies} /> */}
+                <MovieList title="Filmography" hideSeeAll={true} data={personMovies} />
 
 
 

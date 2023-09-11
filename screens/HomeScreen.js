@@ -104,7 +104,8 @@ const HomeScreen = () => {
 
             <MovieList title="Top-Rated" data={topRated} />
 
-            <Cast cast={cast} headShown={true} />
+
+            {/* <Cast cast={cast} headShown={true} /> */}
 
           </ScrollView>
         )

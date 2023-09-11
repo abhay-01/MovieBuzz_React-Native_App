@@ -50,7 +50,7 @@ export default function MovieList({ title, data, hideSeeAll }) {
                   <Image
                     className="rounded-xl"
                     // source={require('../assets/movie2.png')}
-                    source={{ uri: image185(item.poster_path) || fallbackImage }}
+                    source={{ uri: image185(item .poster_path) || fallbackImage }}
                     style={{
                       width: width * 0.4,
                       height: height * 0.28,
