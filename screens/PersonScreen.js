@@ -113,7 +113,7 @@ export default function PersonScreen() {
                     </Text>
                 </View>
 
-                <MovieList title="Filmography" hideSeeAll={true} data={personMovies} />
+                {/* <MovieList title="Filmography" hideSeeAll={true} data={personMovies} /> */}
 
 
 

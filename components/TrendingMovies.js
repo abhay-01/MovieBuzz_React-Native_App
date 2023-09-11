@@ -4,6 +4,7 @@ import Carousel from 'react-native-snap-carousel'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import MovieScreen from '../screens/MovieScreen'
+import { image500 } from '../api/MovieApi'
 
 
 const width = Dimensions.get('window').width;
@@ -37,7 +38,9 @@ const MovieCard = ({ item}) => {
         <TouchableWithoutFeedback  onPress={() => navigation.navigate('MovieScreen', item)}
         > 
             <Image
-            source = {require('../assets/movie1.jpg')} 
+            // source = {require('../assets/movie1.jpg')} 
+
+            source={{ uri: image500(item.poster_path) }}
             style = {{
                 width: width*0.6,
                 height: height*0.4,

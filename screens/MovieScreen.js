@@ -10,7 +10,9 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'react-native-svg';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
+import { image500 } from '../api/MovieApi'
 import Loading from '../components/Loading'
+import { fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies } from '../api/MovieApi';
 
 
 
@@ -23,9 +25,10 @@ export default function MovieScreen() {
     const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
     const [cast, setCast] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const[movie, setMovie] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const movieName = "Ant-Man and the Wasp: Quantumania";
+    const movieName = "Ant-Man and the Wasp: Quantamania";
 
     const { params: item } = useRoute();
 
@@ -34,7 +37,26 @@ export default function MovieScreen() {
     useEffect(() => {
 
         //will call api
-    }, []);
+        setLoading(true);
+        fetchMovieDetails(item.id);
+        fetchMovieCredits(item.id);
+        fetchSimilarMovies(item.id);
+
+
+    }, [item]);
+
+    const fetchMovieDetails = async (id) => {
+        const details = await fetchMovieDetails(id);
+        console.log(details);
+        if(details) setMovie(details);
+        setLoading(false);
+
+    }
+
+    const fetchMovieCredits = async (id) => {
+        const credits = await fetchMovieCredits(id);
+        setCast(credits.cast);
+    }
 
     return (
         <ScrollView
@@ -66,7 +88,9 @@ export default function MovieScreen() {
 
                         <View>
                             <Image
-                                source={require('../assets/movie1.png')}
+                                // source={require('../assets/movie1.png')}
+
+                                source={{ uri: image500(movie.backdrop_path) }}
                                 style={{
                                     width,
                                     height: height * 0.48,
@@ -111,7 +135,7 @@ export default function MovieScreen() {
 
                 {/* similar movies */}
 
-                <MovieList title="You Love to Watch" hideSeeAll={true} data={similarMovies} />
+                {/* <MovieList title="You Love to Watch" hideSeeAll={true} data={similarMovies} /> */}
             </View>
         </ScrollView>
 
