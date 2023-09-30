@@ -8,6 +8,7 @@ import { apiKey } from '../constants';
 const trendingMovies = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`;
 const upcomingMovies = `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`;
 const topRated = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}`;
+const searchMovie =  `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}`;
 
 const fallbackImage = 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg';
 
@@ -27,7 +28,7 @@ export const image342 = path => path ? `${imageBaseUrl}w342${path}` : null;
 export const image185 = path => path ? `${imageBaseUrl}w185${path}` : null;
 
 export const personDetails = id => `https://api.themoviedb.org/3/person/${id}?api_key=${apiKey}`;
-export const personCredits = id => `https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${apiKey}`;
+export const personMovies = id => `https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${apiKey}`;
 
 export const fallback_poster = 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg';
 
@@ -79,7 +80,11 @@ export const fetchPersonDetails = id => {
     return apiCall(personDetails(id));
 }
 
-export const fetchPersonCredits = id => {
-    return apiCall(personCredits(id));
-}
+export const fetchPersonMovies = id => {
+    return apiCall(personMovies(id));
+}   
 
+
+export const searchMovies = params => {
+    return apiCall(searchMovie, params);
+}

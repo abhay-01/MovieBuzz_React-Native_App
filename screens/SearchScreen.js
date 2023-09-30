@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { Dimensions } from 'react-native'
@@ -7,6 +7,11 @@ import { useNavigation } from '@react-navigation/native'
 import { XMarkIcon } from 'react-native-heroicons/outline'
 import { useState } from 'react'
 import Loading from '../components/Loading'
+import { debounce } from 'lodash'
+import { searchMovies } from '../api/MovieApi'
+import { image185 } from '../api/MovieApi'
+import { fallback_poster } from '../api/MovieApi'
+
 
 
 const width = Dimensions.get('window').width;
@@ -18,11 +23,38 @@ export default function SearchScreen() {
     const [results, setResults] = useState([1, 2, 3, 4])
     const [loading, setLoading] = useState(false);
 
+    const handleSearch = text => {
+        // console.log("value: ", text);
+        if (text && text.length > 2) {
+            setLoading(true);
+            searchMovies({
+                query: text,
+                include_adult: 'false',
+                language: 'en-US',
+                pages: '1'
+            }).then(res => {
+                setLoading(false);
+                console.log("res: ", res);
+                if (res && res.results)
+                    setResults(res.results);
+            })
+        } else {
+            setLoading(false);
+            setResults([]);
+        }
+
+    }
+
+    const handleTextDebounce = useCallback(debounce(handleSearch, 1000), []);
+
+
+
     return (
         <ScrollView className="bg-neutral-800 flex-1">
             <View
                 className="border border-neutral-500 mx-4 mt-11 mb-3 flex-row justify-between items-center rounded-full">
                 <TextInput
+                    onChangeText={handleTextDebounce}
                     placeholder="Search Movies..."
                     placeholderTextColor="white"
                     className="text-white text-base pb-1 pl-4 flex-1 tracking-wider"
@@ -73,7 +105,8 @@ export default function SearchScreen() {
                                             >
                                                 <View className="space-y-2 mb-4">
                                                     <Image className="rounded-3xl"
-                                                        source={require('../assets/movie1.png')}
+                                                        // source={require('../assets/movie1.png')}
+                                                        source={{ uri: image185(item.poster_path) || fallback_poster }}
                                                         style={{
                                                             width: width * 0.4,
                                                             height: height * 0.3,
@@ -81,7 +114,7 @@ export default function SearchScreen() {
                                                     />
                                                     <Text className="text-white ml-2">
                                                         {
-                                                            movieName.length > 18 ? movieName.slice(0, 18) + "..." : movieName
+                                                            item?.title.length > 18 ? item?.title.slice(0, 18) + "..." : item?.title
 
                                                         }
                                                     </Text>

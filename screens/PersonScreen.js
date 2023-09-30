@@ -24,7 +24,7 @@ export default function PersonScreen() {
 
     const { params: item } = useRoute();
     const [isFilled, setIsFilled] = useState(false);
-    const[personDetails, setPersonDetails] = useState({});
+    const [personDetails, setPersonDetails] = useState({});
     const [loading, setLoading] = useState(false);
 
     const [personMovies, setPersonMovies] = useState([]);
@@ -39,7 +39,7 @@ export default function PersonScreen() {
 
     const getPersonDetails = async id => {
         const details = await fetchPersonDetails(id);
-        // console.log("Details: ", details);
+        console.log("Details: ", details);
         setPersonDetails(details);
         setLoading(false);
     }
@@ -107,9 +107,9 @@ export default function PersonScreen() {
 
                 <View className="mt-5">
                     <Text className="text-white text-3xl text-center">{item.name}</Text>
-                    <Text className="text-3xs text-center text-neutral-500">{
-                    item?.place_of_birth || "Unknown"
-                    }
+                    <Text className="text-3xs text-center text-neutral-500">
+                        {item.place_of_birth || "N/A"}
+                                            
                     </Text>
                 </View>
 
@@ -119,7 +119,7 @@ export default function PersonScreen() {
                         <Text className="text-neutral-300 text-sm">
 
                             {
-                                item?.gender == 1?"Female":"Male"
+                                item?.gender == 1 ? "Female" : "Male"
                             }
                         </Text>
                     </View>
