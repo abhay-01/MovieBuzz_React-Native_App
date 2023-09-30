@@ -14,6 +14,7 @@ import { fallback_poster } from '../api/MovieApi'
 
 
 
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -113,9 +114,12 @@ export default function SearchScreen() {
                                                         }}
                                                     />
                                                     <Text className="text-white ml-2">
-                                                        {
-                                                            item?.title.length > 18 ? item?.title.slice(0, 18) + "..." : item?.title
 
+                                                        {
+                                                           item.title
+                                                        // item?.title.length > 20 ? item?.title.slice(0, 20) : item?.title
+
+                                                           
                                                         }
                                                     </Text>
 
